@@ -8,3 +8,5 @@ const dbConnect = () => {
 		console.log('Database error')
 	}
 }
+
+module.exports = dbConnect
