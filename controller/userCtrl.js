@@ -32,6 +32,23 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 	}
 })
 
+const updateAUser = asyncHandler(async (req, res) => {
+  const {id} = req.params
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, {
+      firstName: req?.body?.firstName,
+      lastName: req?.body?.lastName,
+      email: req?.body?.email,
+      mobile: req?.body?.mobile,
+    }, {
+      new: true,
+    })
+    res.json(updatedUser)
+  } catch (error) {
+    throw new Error(error)
+  }
+})
+
 // Get all users
 
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -71,4 +88,4 @@ const deleteAUser = asyncHandler(async(req, res) => {
   }
 })
 
-module.exports = { createUser, loginUserCtrl, getAllUsers, getAUser, deleteAUser }
+module.exports = { createUser, loginUserCtrl, getAllUsers, getAUser, deleteAUser, updateAUser }
