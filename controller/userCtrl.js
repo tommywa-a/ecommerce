@@ -43,6 +43,22 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 	}
 })
 
+// Handle refresh token
+const handleRefreshToken = asyncHandler(async (req,res) => {
+  const cookie = req.cookies
+  if (!cookie?.refreshToken) {
+    throw new Error("No Refresh Token in Cookies")
+  }
+  const refreshToken = cookie.refreshToken
+  console.log(refreshToken)
+  const user = await User.findOne({refreshToken})
+  if (!user) {
+    throw new Error("No refresh token matched with user in database")
+  }
+  res.json(user)
+})
+
+// Update a user
 const updateAUser = asyncHandler(async (req, res) => {
   const {_id} = req.user
   validateMongoDBID(_id)
@@ -139,4 +155,4 @@ const unblockUser= asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createUser, loginUserCtrl, getAllUsers, getAUser, deleteAUser, updateAUser, blockUser, unblockUser }
+module.exports = { createUser, loginUserCtrl, getAllUsers, getAUser, deleteAUser, updateAUser, blockUser, unblockUser, handleRefreshToken }
