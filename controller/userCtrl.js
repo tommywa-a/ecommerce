@@ -68,28 +68,28 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 })
 
 // logout functionality
-const logout = asyncHandler(async (req,res) => {
-  const cookie = req.cookies
+const logout = asyncHandler(async (req, res) => {
+	const cookie = req.cookies
 	if (!cookie?.refreshToken) {
 		throw new Error('No Refresh Token in Cookies')
 	}
 	const refreshToken = cookie.refreshToken
 	const user = await User.findOne({ refreshToken })
 	if (!user) {
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: true,
-    })
-    return res.sendStatus(204) // forbidden
+		res.clearCookie('refreshToken', {
+			httpOnly: true,
+			secure: true,
+		})
+		return res.sendStatus(204) // forbidden
 	}
-  await User.findOneAndUpdate(refreshToken, {
-    refreshToken: "",
-  })
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: true,
-  })
-  res.sendStatus(204) // forbidden
+	await User.findOneAndUpdate(refreshToken, {
+		refreshToken: '',
+	})
+	res.clearCookie('refreshToken', {
+		httpOnly: true,
+		secure: true,
+	})
+	res.sendStatus(204) // forbidden
 })
 
 // Update a user
@@ -208,5 +208,5 @@ module.exports = {
 	blockUser,
 	unblockUser,
 	handleRefreshToken,
-  logout,
+	logout,
 }
