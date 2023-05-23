@@ -4,11 +4,26 @@ const slugify = require('slugify')
 
 const createProduct = asyncHandler(async (req, res) => {
 	try {
-		if(req.body.title) {
-			req.body.slug=slugify(req.body.title)
+		if (req.body.title) {
+			req.body.slug = slugify(req.body.title)
 		}
 		const newProduct = await Product.create(req.body)
 		res.json(newProduct)
+	} catch (error) {
+		throw new Error(error)
+	}
+})
+
+const updateProduct = asyncHandler(async(req, res) => {
+	const { id } = req.params;
+	try {
+		if (req.body.title) {
+			req.body.slug = slugify(req.body.title)
+		}
+		const updateProduct = await Product.findOneAndUpdate(id, req.body, {
+			new:true,
+		})
+		res.json(updateProduct)
 	} catch (error) {
 		throw new Error(error)
 	}
@@ -33,4 +48,4 @@ const getAllproducts = asyncHandler(async (req, res) => {
 	}
 })
 
-module.exports = { createProduct, getAProduct, getAllproducts }
+module.exports = { createProduct, getAProduct, getAllproducts, updateProduct }
