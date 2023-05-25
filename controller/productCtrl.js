@@ -14,14 +14,14 @@ const createProduct = asyncHandler(async (req, res) => {
 	}
 })
 
-const updateProduct = asyncHandler(async(req, res) => {
-	const { id } = req.params;
+const updateProduct = asyncHandler(async (req, res) => {
+	const { id } = req.params
 	try {
 		if (req.body.title) {
 			req.body.slug = slugify(req.body.title)
 		}
 		const updateProduct = await Product.findOneAndUpdate(id, req.body, {
-			new:true,
+			new: true,
 		})
 		res.json(updateProduct)
 	} catch (error) {
@@ -29,8 +29,8 @@ const updateProduct = asyncHandler(async(req, res) => {
 	}
 })
 
-const deleteProduct = asyncHandler(async(req, res) => {
-	const { id } = req.params;
+const deleteProduct = asyncHandler(async (req, res) => {
+	const { id } = req.params
 	try {
 		const deleteProduct = await Product.findOneAndDelete(id)
 		res.json(deleteProduct)
@@ -58,4 +58,10 @@ const getAllproducts = asyncHandler(async (req, res) => {
 	}
 })
 
-module.exports = { createProduct, getAProduct, getAllproducts, updateProduct, deleteProduct }
+module.exports = {
+	createProduct,
+	getAProduct,
+	getAllproducts,
+	updateProduct,
+	deleteProduct,
+}
