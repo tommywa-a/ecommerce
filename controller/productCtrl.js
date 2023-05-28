@@ -51,7 +51,12 @@ const getAProduct = asyncHandler(async (req, res) => {
 
 const getAllproducts = asyncHandler(async (req, res) => {
 	try {
-		const getallProducts = await Product.find(req.query)
+		const queryObj = {...req.query}
+		const excludeFields = ['page', 'sort', 'limit', 'fields']
+		excludeFields.forEach(el => delete queryObj[el])
+		
+		
+		const getallProducts = await Product.find(queryObj)
 		res.json(getallProducts)
 	} catch (error) {
 		throw new Error(error)
