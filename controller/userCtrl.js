@@ -213,6 +213,8 @@ const updatePassword = asyncHandler(async (req,res) => {
 	}
 })
 
+const forgotPasswordToken = asyncHandler(async (req, res) => {})
+
 module.exports = {
 	createUser,
 	loginUserCtrl,
@@ -225,4 +227,5 @@ module.exports = {
 	handleRefreshToken,
 	logout,
 	updatePassword,
+	forgotPasswordToken,
 }
