@@ -200,8 +200,8 @@ const unblockUser = asyncHandler(async (req, res) => {
 	}
 })
 
-const updatePassword = asyncHandler(async (req,res) => {
-	const {_id} = req.user
+const updatePassword = asyncHandler(async (req, res) => {
+	const { _id } = req.user
 	const { password } = req.body
 	validateMongoDBID(_id)
 	const user = await User.findById(_id)
@@ -209,17 +209,16 @@ const updatePassword = asyncHandler(async (req,res) => {
 		user.password = password
 		const updatedPassword = await user.save()
 		res.json(updatedPassword)
-	}
-	else{
+	} else {
 		res.json(user)
 	}
 })
 
 const forgotPasswordToken = asyncHandler(async (req, res) => {
-	const {email} = req.body
-	const user = await User.findOne({email})
+	const { email } = req.body
+	const user = await User.findOne({ email })
 	if (!user) {
-		throw new Error("There is no user with this email")
+		throw new Error('There is no user with this email')
 	}
 	try {
 		const token = await user.createPasswordResetToken()
@@ -227,8 +226,8 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 		const resetURL = `Please follow this link to reset your password. This link is valid for 10 minutes. <a href='http://localhost:5000/api/user/reset-password/${token}'>Click here<a/>`
 		const data = {
 			to: email,
-			text: "Hello, user",
-			subject: "Forgot Password Link",
+			text: 'Hello, user',
+			subject: 'Forgot Password Link',
 			htm: resetURL,
 		}
 		console.log(email)
@@ -240,22 +239,21 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 })
 
 const resetPassword = asyncHandler(async (req, res) => {
-	const {password} = req.body
-	const {token} = req.params
+	const { password } = req.body
+	const { token } = req.params
 	const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
 	const user = await User.findOne({
 		passwordResetToken: hashedToken,
-		passwordResetExpires: {$gt: Date.now()}
+		passwordResetExpires: { $gt: Date.now() },
 	})
 	if (!user) {
-		throw new Error("Sorry, this token has expired")
+		throw new Error('Sorry, this token has expired.')
 	}
 	user.password = password
 	user.passwordResetToken = undefined
 	user.passwordResetExpires = undefined
 	await user.save()
 	res.json(user)
-
 })
 
 module.exports = {
