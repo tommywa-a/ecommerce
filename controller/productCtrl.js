@@ -1,6 +1,8 @@
 const Product = require('../models/productModel')
+const User = require('../models/userModel')
 const asyncHandler = require('express-async-handler')
 const slugify = require('slugify')
+const validateMongoDBID = require('../utils/validateMongodbID')
 
 const createProduct = asyncHandler(async (req, res) => {
 	try {
@@ -16,6 +18,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
 	const { id } = req.params
+	validateMongoDBID(id)
 	try {
 		if (req.body.title) {
 			req.body.slug = slugify(req.body.title)
@@ -31,6 +34,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 const deleteProduct = asyncHandler(async (req, res) => {
 	const { id } = req.params
+	validateMongoDBID(id)
 	try {
 		const deleteProduct = await Product.findOneAndDelete(id)
 		res.json(deleteProduct)
@@ -41,6 +45,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getAProduct = asyncHandler(async (req, res) => {
 	const { id } = req.params
+	validateMongoDBID(id)
 	try {
 		const findProduct = await Product.findById(id)
 		res.json(findProduct)
@@ -100,10 +105,37 @@ const getAllproducts = asyncHandler(async (req, res) => {
 	}
 })
 
+const addToWishList = asyncHandler(async(req, res) => {
+	const {_id} = req.user
+	const {prodId} = req.body
+	try {
+		const user = await User.findById(_id)
+		const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId)
+		if (alreadyAdded) {
+			let user = await User.findByIdAndUpdate(_id, {
+				$pull: {wishlist: prodId},
+			}, {
+				new: true,
+			})
+			res.json(user)
+		}else{
+			let user = await User.findByIdAndUpdate(_id, {
+				$push: {wishlist: prodId},
+			}, {
+				new: true,
+			})
+			res.json(user)
+		}
+	} catch (error) {
+		throw new Error(error)
+	}
+})
+
 module.exports = {
 	createProduct,
 	getAProduct,
 	getAllproducts,
 	updateProduct,
 	deleteProduct,
+	addToWishList,
 }

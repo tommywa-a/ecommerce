@@ -30,23 +30,22 @@ var userSchema = new mongoose.Schema(
 			type: String,
 			default: 'user',
 		},
-    isBlocked: {
-      type: Boolean,
-      default: false,
-    },
+		isBlocked: {
+			type: Boolean,
+			default: false,
+		},
 		cart: {
 			type: Array,
 			default: [],
 		},
 		address: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Address' }],
-		wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+		wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 		refreshToken: {
 			type: String,
 		},
-		passwordChangedAt: {type: Date},
-		passwordResetToken: {type: String},
-		passwordResetExpires: {type: Date},
-
+		passwordChangedAt: { type: Date },
+		passwordResetToken: { type: String },
+		passwordResetExpires: { type: Date },
 	},
 	{
 		timestamps: true,
@@ -64,9 +63,12 @@ userSchema.methods.isPasswordMatched = async function (enteredPassword) {
 	return await bcrypt.compare(enteredPassword, this.password)
 }
 userSchema.methods.createPasswordResetToken = async function () {
-	const resettoken = crypto.randomBytes(32).toString("hex")
-	this.passwordResetToken = crypto.createHash('sha256').update(resettoken).digest('hex')
-	this.passwordResetExpires = Date.now()+10*60*1000  // 10 minutes
+	const resettoken = crypto.randomBytes(32).toString('hex')
+	this.passwordResetToken = crypto
+		.createHash('sha256')
+		.update(resettoken)
+		.digest('hex')
+	this.passwordResetExpires = Date.now() + 10 * 60 * 1000 // 10 minutes
 	return resettoken
 }
 
