@@ -190,7 +190,10 @@ const rating = asyncHandler(async (req, res) => {
 	}
 })
 
-const uploadImages = asyncHandler(async(req, res) => {console.log(req.files)})
+const uploadImages = asyncHandler(async(req, res) => {
+	const {id} = req.params
+	validateMongoDBID(id)
+})
 
 module.exports = {
 	createProduct,
