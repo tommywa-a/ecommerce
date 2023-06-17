@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const asyncHandler = require('express-async-handler')
 const slugify = require('slugify')
 const validateMongoDBID = require('../utils/validateMongodbID')
+const cloudinaryUploadImg = require('../utils/cloudinary')
 
 const createProduct = asyncHandler(async (req, res) => {
 	try {
@@ -193,6 +194,11 @@ const rating = asyncHandler(async (req, res) => {
 const uploadImages = asyncHandler(async(req, res) => {
 	const {id} = req.params
 	validateMongoDBID(id)
+	try{
+		const uploader = (path) => cloudinaryUploadImg()
+	} catch (error) {
+		throw new Error (error)
+	}
 })
 
 module.exports = {
