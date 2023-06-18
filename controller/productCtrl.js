@@ -195,7 +195,24 @@ const uploadImages = asyncHandler(async(req, res) => {
 	const {id} = req.params
 	validateMongoDBID(id)
 	try{
-		const uploader = (path) => cloudinaryUploadImg()
+		const uploader = (path) => cloudinaryUploadImg(path, "images")
+		const urls = []
+		const files = req.files
+		for(const file of files) {
+			const {path} = file
+			const newpath = await uploader(path)
+			urls.push(newpath)
+		}
+		const findProduct = await Product.findByIdAndUpdate(id, {
+			images: urls.map((file) => {
+				return file
+			})	
+		},
+		{
+			new: true,
+		}
+		)
+		res.json(findProduct)
 	} catch (error) {
 		throw new Error (error)
 	}
