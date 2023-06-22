@@ -8,7 +8,7 @@ const {
 	deleteBlog,
 	likeTheBlog,
 	dislikeTheBlog,
-  uploadImages,
+	uploadImages,
 } = require('../controller/blogCtrl')
 const { blogImgResize, uploadPhoto } = require('../middlewares/uploadImages')
 const router = express.Router()
@@ -22,7 +22,7 @@ router.put(
 	'/upload/:id',
 	authMiddleware,
 	isAdmin,
-  uploadPhoto.array('images', 2),
+	uploadPhoto.array('images', 2),
 	blogImgResize,
 	uploadImages
 )
