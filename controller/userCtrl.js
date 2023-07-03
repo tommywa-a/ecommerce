@@ -362,6 +362,17 @@ const userCart = asyncHandler(async(req, res) => {
 	}
 })
 
+const getUserCart = asyncHandler(async(req, res) => {
+	const {_id} = req.user
+	validateMongoDBID(_id)
+	try {
+		const cart = await Cart.findOne({orderby: _id})
+		res.json(cart)
+	} catch (error) {
+		throw new Error(error)
+	}
+})
+
 module.exports = {
 	createUser,
 	loginUserCtrl,
@@ -380,4 +391,5 @@ module.exports = {
 	getWishlist,
 	saveAddress,
 	userCart,
+	getUserCart
 }
