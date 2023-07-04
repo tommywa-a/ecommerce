@@ -2,6 +2,7 @@ const { generateToken } = require('../config/jwtToken')
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Cart = require('../models/cartModel')
+const Coupon = require('../models/couponModel')
 const asyncHandler = require('express-async-handler')
 const validateMongoDBID = require('../utils/validateMongodbID')
 const { generateRefreshToken } = require('../config/refreshToken')
@@ -385,6 +386,12 @@ const emptyCart = asyncHandler(async(req, res) => {
 	}
 })
 
+const applyCoupon = asyncHandler(async(req,res) => {
+const {coupon} = req.body
+const validCoupon = await Coupon.findOne({name: coupon})
+console.log(validCoupon)
+})
+
 module.exports = {
 	createUser,
 	loginUserCtrl,
@@ -405,4 +412,5 @@ module.exports = {
 	userCart,
 	getUserCart,
 	emptyCart,
+	applyCoupon
 }
