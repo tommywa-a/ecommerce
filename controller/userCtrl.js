@@ -388,8 +388,17 @@ const emptyCart = asyncHandler(async(req, res) => {
 
 const applyCoupon = asyncHandler(async(req,res) => {
 const {coupon} = req.body
+const {_id} = req.user
+validateMongoDBID(_id)
 const validCoupon = await Coupon.findOne({name: coupon})
-console.log(validCoupon)
+if (validCoupon === null) {
+	throw new Error("Invalid Coupon")
+}
+const user = await User.findOne({ _id})
+let {products, cartTotal} = await Cart.findOne({orderby: user._id}).populate('products.product')
+let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount)/100).toFixed(2)
+await Cart.findOneAndDelete({orderby:user._id}, {totalAfterDiscount}, {new:true})
+res.json(totalAfterDiscount)
 })
 
 module.exports = {
