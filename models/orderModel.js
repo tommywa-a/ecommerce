@@ -10,7 +10,7 @@ var orderSchema = new mongoose.Schema(
 					ref: 'Product',
 				},
 				count: Number,
-				colour: String,
+				color: String,
 			},
 		],
 		paymentIntent: {},
