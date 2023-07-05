@@ -22,6 +22,7 @@ const {
 	applyCoupon,
 	createOrder,
 	getOrders,
+	updateOrderStatus,
 } = require('../controller/userCtrl')
 const { authMiddleware, isAdmin } = require('../middlewares/authMiddleware')
 const router = express.Router()
@@ -49,6 +50,7 @@ router.put('/edit-user', authMiddleware, updateAUser)
 router.put('/save-address', authMiddleware, saveAddress)
 router.put('/block-user/:id', authMiddleware, isAdmin, blockUser)
 router.put('/unblock-user/:id', authMiddleware, isAdmin, unblockUser)
+router.put('/order/update-order/:id', authMiddleware, isAdmin, updateOrderStatus)
 
 router.get('/', (req, res) => {
 	res.json({
