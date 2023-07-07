@@ -37,7 +37,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 			{
 				refreshToken: refreshToken,
 			},
-			{new: true}
+			{ new: true }
 		)
 		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
