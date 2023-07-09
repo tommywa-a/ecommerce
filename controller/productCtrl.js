@@ -213,6 +213,16 @@ const uploadImages = asyncHandler(async (req, res) => {
 	}
 })
 
+const deleteImages = asyncHandler(async (req, res) => {
+	const {id} = req.params
+	try {
+		const deleted = cloudinaryDeleteImg(id, 'images')
+		res.json({message: "Deleted"})
+	} catch (error) {
+		throw new Error(error)
+	}
+})
+
 module.exports = {
 	createProduct,
 	getAProduct,
@@ -222,4 +232,5 @@ module.exports = {
 	addToWishList,
 	rating,
 	uploadImages,
+	deleteImages,
 }
